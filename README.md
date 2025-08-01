@@ -7,17 +7,14 @@ Projeto desenvolvido como parte do processo seletivo para estágio em Desenvolvi
 Este projeto adota uma arquitetura cliente-servidor moderna, com as seguintes tecnologias:
 
 ### 🔧 Backend
-- **Node.js** com **Express** – API REST para gerenciamento de tarefas e autenticação.
-- **SQLite** – Banco de dados leve e simples para persistência local durante o desenvolvimento.
-- **Sequelize** – ORM para modelagem de dados e migrações.
+- **Java** com **Spring Boot** – API REST para gerenciamento de tarefas e autenticação.
+- **MySQL** – Banco de dados
 
 ### 🎨 Frontend
-- **React** com **Vite** – Interface reativa, moderna e otimizada.
+- **React** – Interface reativa, moderna e otimizada.
 - **Tailwind CSS** – Framework utilitário para construção de UI responsiva e elegante.
-- **Axios** – Cliente HTTP para comunicação com a API.
 
 ### 🧪 Outros
-- **ESLint + Prettier** – Padronização de código.
 - **Git + GitHub** – Versionamento e controle colaborativo.
 - **Postman** – Testes de API durante o desenvolvimento.
 
