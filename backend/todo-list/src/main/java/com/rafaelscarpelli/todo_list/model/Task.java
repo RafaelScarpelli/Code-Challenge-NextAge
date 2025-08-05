@@ -47,29 +47,26 @@ public class Task {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
     private LocalDateTime completedAt;
-
-    private LocalDateTime dueDate;
-
-    private LocalDateTime deletedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @ToString.Exclude
+    @NotNull
     private User user;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PriorityLevel priority;
+    private PriorityLevel priority = PriorityLevel.MEDIUM;
 
     @ManyToMany
     @JoinTable(name = "task_tag", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    @ToString.Exclude
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private List<Reminder> reminders;
+    private List<Reminder> reminders = new ArrayList<>();
 
     public void markAsCompleted() {
         this.status = TaskStatus.COMPLETED;

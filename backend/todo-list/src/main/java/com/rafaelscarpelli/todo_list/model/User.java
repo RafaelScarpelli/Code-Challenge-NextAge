@@ -46,8 +46,7 @@ public class User {
     private LocalDateTime resetPasswordExpires;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     public void generateResetPasswordToken() {
         this.resetPasswordToken = UUID.randomUUID().toString();
@@ -57,5 +56,10 @@ public class User {
     public boolean isResetTokenValid() {
         return resetPasswordToken != null && resetPasswordExpires != null &&
                 resetPasswordExpires.isAfter(LocalDateTime.now());
+    }
+
+    public void clearResetPasswordToken() {
+        this.resetPasswordToken = null;
+        this.resetPasswordExpires = null;
     }
 }

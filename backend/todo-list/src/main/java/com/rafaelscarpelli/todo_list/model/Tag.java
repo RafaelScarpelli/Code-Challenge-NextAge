@@ -23,11 +23,11 @@ public class Tag {
     private Long id;
 
     @NotBlank
-    @Size(max = 50)
+    @Size(min = 1, max = 50)
+    @Column(unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "tags")
-    @ToString.Exclude
     private List<Task> tasks;
 
     public void addTask(Task task) {

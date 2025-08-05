@@ -27,7 +27,7 @@ public class Reminder {
 
     @ManyToOne
     @JoinColumn(name = "task_id")
-    @ToString.Exclude
+    @NotNull
     private Task task;
 
     public boolean isDue() {
