@@ -1,4 +1,4 @@
-package com.rafaelscarpelli.todo_list.model;
+package com.rafaelscarpelli.todo_list.enums;
 
 import lombok.Getter;
 
@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum TaskStatus {
     PENDING,
     COMPLETED;
-    
+
     public boolean isCompleted() {
         return this == COMPLETED;
     }

@@ -1,9 +1,11 @@
 package com.rafaelscarpelli.todo_list.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.annotation.CreatedDate;
+import com.rafaelscarpelli.todo_list.enums.PriorityLevel;
+import com.rafaelscarpelli.todo_list.enums.TaskStatus;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,11 +20,12 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.ToString;
 
 @Entity
 @Table(name = "tasks")
@@ -44,11 +47,7 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
-    @CreatedDate
     private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     private LocalDateTime completedAt;
 
@@ -61,9 +60,10 @@ public class Task {
     @Column(nullable = false)
     private PriorityLevel priority = PriorityLevel.MEDIUM;
 
-    @ManyToMany
-    @JoinTable(name = "task_tag", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private List<Tag> tags = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    @NotNull
+    private Tag tag;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<Reminder> reminders = new ArrayList<>();
@@ -73,26 +73,16 @@ public class Task {
         this.completedAt = LocalDateTime.now();
     }
 
-    public void markAsDeleted() {
-        this.deletedAt = LocalDateTime.now();
-    }
-
-    public boolean isOverdue() {
-        return dueDate != null && dueDate.isBefore(LocalDateTime.now());
-    }
-
-    public void addTag(Tag tag) {
-        tags.add(tag);
-        tag.getTasks().add(this);
-    }
-
-    public void removeTag(Tag tag) {
-        tags.remove(tag);
-        tag.getTasks().remove(this);
-    }
-
     public void addReminder(Reminder reminder) {
         reminders.add(reminder);
         reminder.setTask(this);
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        if (status == null) {
+            status = TaskStatus.PENDING;
+        }
     }
 }

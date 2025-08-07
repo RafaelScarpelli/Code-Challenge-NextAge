@@ -1,4 +1,4 @@
-package com.rafaelscarpelli.todo_list.model;
+package com.rafaelscarpelli.todo_list.enums;
 
 import lombok.Getter;
 
