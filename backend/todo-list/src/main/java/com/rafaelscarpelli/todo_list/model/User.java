@@ -28,11 +28,12 @@ public class User {
     private Long id;
 
     @NotBlank
-    @Size(max = 100)
+    @Size(min = 1, max = 100)
+    @Column(nullable = false)
     private String name;
 
-    @Email
     @NotBlank
+    @Email
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -47,6 +48,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Task> tasks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Tag> tags = new ArrayList<>();
 
     public void generateResetPasswordToken() {
         this.resetPasswordToken = UUID.randomUUID().toString();

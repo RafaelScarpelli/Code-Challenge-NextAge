@@ -2,6 +2,7 @@ package com.rafaelscarpelli.todo_list.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +12,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.ToString;
 
 @Entity
 @Table(name = "reminders")
@@ -23,6 +23,7 @@ public class Reminder {
     private Long id;
 
     @NotNull
+    @Column(nullable = false)
     private LocalDateTime reminderTime;
 
     @ManyToOne
@@ -30,7 +31,14 @@ public class Reminder {
     @NotNull
     private Task task;
 
+    @Column(nullable = false)
+    private boolean isActive = true;
+    
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
     public boolean isDue() {
-        return reminderTime != null && reminderTime.isBefore(LocalDateTime.now());
+        return isActive && reminderTime != null && reminderTime.isBefore(LocalDateTime.now());
     }
 }

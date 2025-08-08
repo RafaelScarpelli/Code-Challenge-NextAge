@@ -5,13 +5,15 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -26,13 +28,18 @@ public class Tag {
 
     @NotBlank
     @Size(min = 1, max = 50)
-    @Column(unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private boolean isDefault = false;
 
-    @OneToMany(mappedBy = "tag", fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @NotNull
+    private User user;
+
+    @OneToMany(mappedBy = "tag")
     private List<Task> tasks = new ArrayList<>();
 
     public void addTask(Task task) {
@@ -42,7 +49,6 @@ public class Tag {
 
     public void removeTask(Task task) {
         tasks.remove(task);
-        // sem task.setTag(null), pois violaria @NotNull
-        // será tratada no serviçe
+        // reassociação será tratada no service.
     }
 }
