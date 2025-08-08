@@ -49,7 +49,7 @@ public class Task {
 
     private LocalDateTime completedAt;
 
-    private LocalDateTime dueDate; // Novo campo para data de vencimento
+    private LocalDateTime dueDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
