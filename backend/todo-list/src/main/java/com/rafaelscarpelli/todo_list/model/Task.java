@@ -65,18 +65,9 @@ public class Task {
     @NotNull
     private Tag tag;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private List<Reminder> reminders = new ArrayList<>();
-
     public void markAsCompleted() {
         this.status = TaskStatus.COMPLETED;
         this.completedAt = LocalDateTime.now();
-        this.reminders.forEach(reminder -> reminder.setIsActive(false));
-    }
-
-    public void addReminder(Reminder reminder) {
-        reminders.add(reminder);
-        reminder.setTask(this);
     }
 
     @PrePersist
