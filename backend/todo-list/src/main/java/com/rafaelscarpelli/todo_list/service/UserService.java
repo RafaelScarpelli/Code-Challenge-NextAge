@@ -6,7 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rafaelscarpelli.todo_list.model.Tag;
 import com.rafaelscarpelli.todo_list.model.User;
+import com.rafaelscarpelli.todo_list.repository.TagRepository;
 import com.rafaelscarpelli.todo_list.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -15,12 +17,13 @@ import jakarta.persistence.EntityNotFoundException;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, TagRepository tagRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.tagRepository = tagRepository;
     }
 
     public List<User> getAllUsers() {
@@ -32,13 +35,27 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
     }
 
+    public User getUserByEmail(String email) {
+    return userRepository.findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+    }
+
     @Transactional
     public User createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("E-mail já está em uso");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        // lista geral
+        Tag defaultTag = new Tag();
+        defaultTag.setName("lista geral");
+        defaultTag.setDefault(true);
+        defaultTag.setUser(savedUser);
+        tagRepository.save(defaultTag);
+
+        return savedUser;
     }
 
     @Transactional

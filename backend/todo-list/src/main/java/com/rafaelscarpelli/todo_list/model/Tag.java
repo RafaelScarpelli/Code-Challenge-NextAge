@@ -49,6 +49,5 @@ public class Tag {
 
     public void removeTask(Task task) {
         tasks.remove(task);
-        // reassociação será tratada no service.
     }
 }
